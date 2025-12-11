@@ -13,7 +13,7 @@ $sessionId = $_SESSION['session_id'];
 $message = '';
 
 // --- 2. ОБРАБОТКА POST-ЗАПРОСА ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['submit_quiz'])) {
 
     // Получаем все вопросы из БД для проверки
     $stmt = $pdo->query("SELECT id FROM questions");
@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
 $stmt = $pdo->query("SELECT id, text FROM questions");
 $questions = $stmt->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
