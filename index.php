@@ -29,7 +29,7 @@ if (isset($_POST['submit_quiz'])) {
         $answer = isset($_POST['q_' . $question_id]) ? $_POST['q_' . $question_id] : '';
 
         if (!empty($answer)) {
-            $sql = "INSERT INTO user_responses (questions_id, session_id, answer_text) 
+            $sql = "INSERT INTO responses (questions_id, session_id, answer_text) 
                     VALUES (?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$question_id, $session_id, $answer]);
