@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_quiz'])) {
             $answer = $_POST[$input_name];
 
             // Сохраняем ответ
-            $sql = "INSERT INTO user_responses (questions_id, session_id, answer_text) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO responses (questions_id, session_id, answer_text) VALUES (?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$question_id, $sessionId, $answer]);
 
