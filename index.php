@@ -4,6 +4,11 @@ ini_set('display_errors', 1);
 
 session_start();
 
+if (!isset($_SESSION['session_id'])) {
+    $_SESSION['session_id'] = uniqid('quiz_', true);
+}
+$sessionId = $_SESSION['session_id'];
+
 require_once 'db_connect.php';
 
 if (isset($_POST['submit_quiz'])) {
@@ -12,6 +17,7 @@ if (isset($_POST['submit_quiz'])) {
     $questions = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $all_answered = true;
+    $saved_count = 0;
 
     foreach ($questions as $question_id) {
         if (empty($_POST['q_'.$question_id])) {
@@ -20,9 +26,19 @@ if (isset($_POST['submit_quiz'])) {
     }
 
     if ($all_answered) {
-        echo "<p style='color:green;'> ответы сохранены</p>";
+        foreach ($questions as $question_id) {
+            $answer = trim($_POST['q_'.$question_id]);
+
+            $sql = "INSERT INTO responses (questions_id, session_id, answer_text) 
+                    VALUES (?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+        }
+
+        echo "<p style='color:green;'>Сохранено </p>";
+
+
     } else {
-        echo "<p style='color:red;'>ответьте на все вопросы</p>";
+        echo "<p style='color:red;'> Ответьте на все вопросы</p>";
     }
 }
 
@@ -34,7 +50,7 @@ $questions = $stmt->fetchAll();
 <html>
 <head>
     <meta charset="UTF-8">
-    <title> опросник</title>
+    <title>Опросник</title>
 </head>
 <body>
 
@@ -45,7 +61,11 @@ $questions = $stmt->fetchAll();
     <?php foreach ($questions as $question): ?>
         <div style="margin: 20px 0; padding: 15px; border: 1px solid #ccc;">
             <p><b><?php echo $question['text']; ?></b></p>
-            <textarea name="q_<?php echo $question['id']; ?>" rows="4" cols="50"></textarea>
+            <textarea name="q_<?php echo $question['id']; ?>" rows="4" cols="50"><?php
+                if (isset($_POST['submit_quiz']) && isset($_POST['q_'.$question['id']])) {
+                    echo htmlspecialchars($_POST['q_'.$question['id']]);
+                }
+                ?></textarea>
         </div>
     <?php endforeach; ?>
 
@@ -53,5 +73,6 @@ $questions = $stmt->fetchAll();
 
 </form>
 
+<hr>
 </body>
 </html>
