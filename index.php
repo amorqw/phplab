@@ -1,4 +1,5 @@
 <?php
+// 1. Подключаемся к БД
 require_once 'db_connect.php';
 
 // Устанавливаем уникальный идентификатор для сессии (для группировки ответов)
@@ -54,6 +55,10 @@ $questions = $stmt->fetchAll();
 
 <!DOCTYPE html>
 <html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Опросник на PHP</title>
+</head>
 <body>
 
 <h1>Опросник</h1>
