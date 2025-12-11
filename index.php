@@ -21,8 +21,8 @@ $questions = $stmt->fetchAll(PDO::FETCH_COLUMN);
 $all_saved = true;
 
 // Вставляем каждый ответ в БД
-foreach ($questions as $question_id) {
-$input_name = "q_" . $question_id;
+foreach ($questions as $questions_id) {
+$input_name = "q_" . $questions_id;
 
 // Проверяем, был ли ответ на этот вопрос
 if (isset($_POST[$input_name]) && !empty($_POST[$input_name])) {
@@ -31,7 +31,7 @@ $answer = $_POST[$input_name];
 // Используем подготовленные запросы для безопасности (защита от SQL-инъекций)
 $sql = "INSERT INTO user_responses (questions_id, session_id, answer_text) VALUES (?, ?, ?)";
 $stmt = $pdo->prepare($sql);
-$stmt->execute([$question_id, $sessionId, $answer]);
+$stmt->execute([$questions_id, $sessionId, $answer]);
 } else {
 $all_saved = false;
 }
