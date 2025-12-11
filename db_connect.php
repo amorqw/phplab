@@ -5,7 +5,7 @@ try{
     print_r("ПОДКЛЮЧИЛИСЬ");
 }
 catch(\PDOException $e){
-    log("ОШИБКА!!!!!!!: " . $e->getMessage());
+    print_r("ОШИБКА!!!!!!!: " . $e->getMessage());
 }
 ?>
 
