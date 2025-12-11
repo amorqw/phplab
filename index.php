@@ -1,44 +1,47 @@
 <?php
+// Включаем показ ошибок
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Начинаем сессию
 session_start();
 
-if (!isset($_SESSION['session_id'])) {
-    $_SESSION['session_id'] = uniqid('quiz_', true);
-}
-$sessionId = $_SESSION['session_id'];
-
+// Подключаемся к базе данных
 require_once 'db_connect.php';
 
+// Если нажали кнопку отправки
 if (isset($_POST['submit_quiz'])) {
 
+    // Генерируем ID сессии
+    if (!isset($_SESSION['session_id'])) {
+        $_SESSION['session_id'] = uniqid();
+    }
+    $session_id = $_SESSION['session_id'];
+
+    // Получаем все вопросы
     $stmt = $pdo->query("SELECT id FROM questions");
     $questions = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $all_answered = true;
-    $saved_count = 0;
+    $saved = 0;
 
     foreach ($questions as $question_id) {
-        if (empty($_POST['q_'.$question_id])) {
+        $answer = isset($_POST['q_' . $question_id]) ? $_POST['q_' . $question_id] : '';
+
+        if (!empty($answer)) {
+            $sql = "INSERT INTO user_responses (questions_id, session_id, answer_text) 
+                    VALUES (?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$question_id, $session_id, $answer]);
+        } else {
             $all_answered = false;
         }
     }
 
     if ($all_answered) {
-        foreach ($questions as $question_id) {
-            $answer = trim($_POST['q_'.$question_id]);
-
-            $sql = "INSERT INTO responses (questions_id, session_id, answer_text) 
-                    VALUES (?, ?, ?)";
-            $stmt = $pdo->prepare($sql);
-        }
-
-        echo "<p style='color:green;'>Сохранено </p>";
-
-
+        echo "<p style='color:green;'>Спасибо</p>";
     } else {
-        echo "<p style='color:red;'> Ответьте на все вопросы</p>";
+        echo "<p style='color:red;'>Ответьте на все вопросы</p>";
     }
 }
 
@@ -61,11 +64,7 @@ $questions = $stmt->fetchAll();
     <?php foreach ($questions as $question): ?>
         <div style="margin: 20px 0; padding: 15px; border: 1px solid #ccc;">
             <p><b><?php echo $question['text']; ?></b></p>
-            <textarea name="q_<?php echo $question['id']; ?>" rows="4" cols="50"><?php
-                if (isset($_POST['submit_quiz']) && isset($_POST['q_'.$question['id']])) {
-                    echo htmlspecialchars($_POST['q_'.$question['id']]);
-                }
-                ?></textarea>
+            <textarea name="q_<?php echo $question['id']; ?>" rows="4" cols="50"></textarea>
         </div>
     <?php endforeach; ?>
 
@@ -73,6 +72,5 @@ $questions = $stmt->fetchAll();
 
 </form>
 
-<hr>
 </body>
 </html>
