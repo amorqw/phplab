@@ -8,7 +8,7 @@ require_once 'db_connect.php';
 <h1>Все ответы</h1>
 <?php
 $stmt = $pdo->query("
-    select q.text as question, r.answer_text, r.session_id
+    select q.text as question, r.answer_text, r.session_id, r.created_at
     from responses r
     join questions q ON r.questions_id = q.id
     order by r.created_at desc
