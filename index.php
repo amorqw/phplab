@@ -17,8 +17,6 @@ if (isset($_POST['submit_quiz'])) {
     $questions = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $all_answered = true;
-    $saved = 0;
-
     foreach ($questions as $question_id) {
         $answer = isset($_POST['q_' . $question_id]) ? $_POST['q_' . $question_id] : '';
 
@@ -63,6 +61,12 @@ $questions = $stmt->fetchAll();
     <?php endforeach; ?>
 
     <button type="submit" name="submit_quiz">Отправить</button>
+
+    <div style="margin-top: 20px;">
+        <a href="responses.php" style="color: blue">
+            Посмотреть все ответы
+        </a>
+    </div>
 
 </form>
 
