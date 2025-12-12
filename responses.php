@@ -17,7 +17,7 @@ $all_answers = $stmt->fetchAll();
 
 foreach ($all_answers as $row) {
     echo "<div style='border:1px solid #ccc; margin:10px 0; padding:10px;'>";
-    echo "<b>Сессия:</b> " . substr($row['session_id'], 0) . "...<br>";
+    echo "<b>Сессия:</b> " . substr($row['session_id'], 0) . "<br>";
     echo "<b>Вопрос:</b> " . htmlspecialchars($row['question']) . "<br>";
     echo "<b>Ответ:</b> " . htmlspecialchars($row['answer_text']);
     echo "</div>";
