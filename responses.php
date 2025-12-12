@@ -20,6 +20,7 @@ foreach ($all_answers as $row) {
     echo "<b>Сессия:</b> " . substr($row['session_id'], 0) . "<br>";
     echo "<b>Вопрос:</b> " . htmlspecialchars($row['question']) . "<br>";
     echo "<b>Ответ:</b> " . htmlspecialchars($row['answer_text']);
+    echo "<b>Время:</b>" . htmlspecialchars($row['created_at']) . "<br>";
     echo "</div>";
 
 }
