@@ -1,24 +1,18 @@
 <?php
-// Включаем показ ошибок
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Начинаем сессию
 session_start();
 
-// Подключаемся к базе данных
 require_once 'db_connect.php';
 
-// Если нажали кнопку отправки
 if (isset($_POST['submit_quiz'])) {
 
-    // Генерируем ID сессии
     if (!isset($_SESSION['session_id'])) {
         $_SESSION['session_id'] = uniqid();
     }
     $session_id = $_SESSION['session_id'];
 
-    // Получаем все вопросы
     $stmt = $pdo->query("SELECT id FROM questions");
     $questions = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
