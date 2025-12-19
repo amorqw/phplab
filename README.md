@@ -1,7 +1,7 @@
 ## Для подключения к бд, в .env файле введите данные параметры
 
 ```
-DB_NAME=your_name /n
+DB_NAME=your_name 
 DB_USER=your_username
 DB_PASS=your_password
 DB_HOST=database
